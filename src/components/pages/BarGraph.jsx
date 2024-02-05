@@ -144,6 +144,7 @@ function BarGraph() {
     const selectedDomain = event.target.value;
     setSelectedDomain(selectedDomain);
     setSelectedDifficulty('');
+  
   };
 
   const handleDifficultyChange = (event) => {

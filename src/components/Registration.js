@@ -332,7 +332,7 @@ function Register() {
   // };
 
 const validatePassword = (value) => {
-  const alphanumericRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@])[A-Za-z\d@]{8,}$/;
+  const alphanumericRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@]{8,}$/;
   return alphanumericRegex.test(value);
 };
 
@@ -359,22 +359,25 @@ const handleSubmit = async (event) => {
 
   try {
     const response = await axios.post('http://127.0.0.1:8000/api/register/', formData);
-    setError(null);
+    // setError(null);
     console.log(response.data);
+
     window.location.href = '/login';
+  
+  
   } catch (err) {
-    if (err.response && err.response.status === 409) {
+    if (err.response && err.response.status === 400) {
       const errorData = err.response.data;
-      if (errorData.email) {
-        setMssg("Email already exists");
-      } else if (errorData.username) {
-        setMssg("Username already exists");
-      }
-      if (alertElement) alertElement.style.display = 'block';
-    } else {
-      setError(err.message);
+      console.log(errorData.error)
+      // document.getElementById('alert').style.display = 'block';
+      alertElement.style.display = 'block'
+
+      setMssg(errorData.error)
     }
+    
   }
+  
+  
 }
 
 
@@ -382,31 +385,31 @@ const handleSubmit = async (event) => {
   return (
     <center>
       <div className="partition">
-        <div className="partition-image" style={{ backgroundImage: `url(${log})` }} ></div> 
+        {/* <div className="partition-image" style={{ backgroundImage: `url(${log})` }} ></div>  */}
         <div className="login-container">
           <div className="title">Registration</div>
           <div className="content">
             <form action="#" onSubmit={handleSubmit}>
               <div className="user-details">
                 <div className="input-box">
-                  <span className="details">First Name</span>
+                  {/* <span className="details">First Name</span> */}
                   <input name="first_name" type="text" placeholder="First Name" id="first_name" value={formData.first_name} onChange={handleInputChange} required/>
                 </div>
                 <div className="input-box">
-                  <span className="details">Last Name</span>
+                  {/* <span className="details">Last Name</span> */}
                   <input name="last_name" type="text" placeholder="Last Name" id="last_name" value={formData.last_Name} onChange={handleInputChange} required/>
                 </div>
 
                 <div className="inputbox">
-                  <span className="details">Email</span>
+                  {/* <span className="details">Email</span> */}
                   <input name="email" type="email" placeholder="Email" id="email" value={formData.email} onChange={handleInputChange} required/>
                 </div>
                 <div className="inputbox">
-                  <span className="details">Username</span>
+                  {/* <span className="details">Username</span> */}
                   <input name="username" type="text" placeholder="Username" id="username" value={formData.username} onChange={handleInputChange} required/>
                 </div>
                 <div className="inputbox">
-                  <span className="details">Password</span>
+                  {/* <span className="details">Password</span> */}
                   <div className="password-input-container">
                     <input
                       name="password"
@@ -427,7 +430,7 @@ const handleSubmit = async (event) => {
               <div className="button">
                 <input type="submit" value="Register"/>
               </div>
-              <Link to="/login">Login?</Link>
+              <Link to="/login" className='login-link'>Login?</Link>
               {/* Add the alert div */}
               <div id="alert" className="error-message">
                 {mssg}
